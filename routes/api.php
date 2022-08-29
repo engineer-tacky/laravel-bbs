@@ -2,9 +2,11 @@
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
-use App\Http\Controllers\CategoryController;
 use App\Http\Controllers\ThreadController;
 use App\Http\Controllers\CommentController;
+use App\Http\Controllers\CategoryController;
+use App\Http\Controllers\ThreadCommentController;
+use App\Http\Controllers\CategoryThreadController;
 
 /*
 |--------------------------------------------------------------------------
@@ -21,6 +23,8 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
     return $request->user();
 });
 
-Route::apiResource('category', CategoryController::class)->only('index', 'show');
-Route::apiResource('thread', ThreadController::class)->except('update', 'destroy');
-Route::apiResource('comment', CommentController::class)->only('index', 'store');
+Route::apiResource('categories', CategoryController::class)->only('index');
+Route::apiResource('categories.threads', CategoryThreadController::class)->only('index', 'store');
+Route::apiResource('threads', ThreadController::class)->only('index');
+Route::apiResource('threads.comments', ThreadCommentController::class)->only('index', 'store');
+Route::apiResource('comments', CommentController::class)->only('index');

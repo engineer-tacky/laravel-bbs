@@ -2,21 +2,22 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Category;
+use App\Models\Thread;
+use App\Models\Comment;
 use Illuminate\Http\Request;
 
-class CategoryController extends Controller
+class ThreadCommentController extends Controller
 {
     /**
      * Display a listing of the resource.
      *
      * @return \Illuminate\Http\Response
      */
-    public function index()
+    public function index($thread_id)
     {
-        $categories = Category::all();
+        $comments = Thread::findOrFail($thread_id)->comment;
 
-        return response()->json(['categories' => $categories]);
+        return response()->json(['comments' => $comments]);
     }
 
     /**
@@ -25,18 +26,24 @@ class CategoryController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request)
+    public function store(Request $request, $thread_id)
     {
-        //
+        $comment = new Comment;
+        $comment->category_id = $request->category_id;
+        $comment->thread_id = $thread_id;
+        $comment->comment = $request->comment;
+        $comment->save();
+
+        return response()->json(['result' => 'OK']);
     }
 
     /**
      * Display the specified resource.
      *
-     * @param  \App\Models\Category  $category
+     * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function show(Category $category)
+    public function show($id)
     {
         //
     }
@@ -45,10 +52,10 @@ class CategoryController extends Controller
      * Update the specified resource in storage.
      *
      * @param  \Illuminate\Http\Request  $request
-     * @param  \App\Models\Category  $category
+     * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, Category $category)
+    public function update(Request $request, $id)
     {
         //
     }
@@ -56,10 +63,10 @@ class CategoryController extends Controller
     /**
      * Remove the specified resource from storage.
      *
-     * @param  \App\Models\Category  $category
+     * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function destroy(Category $category)
+    public function destroy($id)
     {
         //
     }
